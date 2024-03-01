@@ -1,18 +1,30 @@
 import { Request, Response } from "express";
 import { UserFactory } from "./factories/userFactory";
+import JwtService from "../services/jwt/jwtService";
 
-const factory = new UserFactory();
+export default class UserController {
+  private factory = new UserFactory();
+  private jwtService = new JwtService();
 
-export class UserController {
-  public async registerController(req: Request, res: Response) {
+  public registerController = async (req: Request, res: Response) => {
     const newUserDto = req.body;
 
-    const { userService } = await factory.exec();
+    const { userService } = await this.factory.exec();
 
     await userService.register(newUserDto);
 
     return res.status(200).send({ message: "Register successfull." });
-  }
-}
+  };
 
-export default new UserController();
+  public authController = async (req: Request, res: Response) => {
+    const authDto = req.body;
+
+    const { userService } = await this.factory.exec();
+
+    const userAuth = await userService.auth(authDto);
+
+    const authToken = this.jwtService.sign(userAuth.id);
+
+    return res.status(200).send({ token: authToken });
+  };
+}

@@ -1,4 +1,7 @@
-import type { UserServiceRegisterRequest } from "../../../@types/user.types";
+import type {
+  UserServiceAuthRequest,
+  UserServiceRegisterRequest,
+} from "../../../@types/user.types";
 import BadRequestException from "../../exceptions/badRequestException";
 
 export default class UserDtoService {
@@ -21,6 +24,20 @@ export default class UserDtoService {
       throw new BadRequestException(
         "password DTO can't be less than 6 characters."
       );
+    }
+  }
+
+  public authDtoCheck(dto: UserServiceAuthRequest) {
+    if (!dto) {
+      throw new BadRequestException("Dto can't be null.");
+    }
+
+    if (!dto.email) {
+      throw new BadRequestException("email DTO can't be empty.");
+    }
+
+    if (!dto.password) {
+      throw new BadRequestException("password DTO can't be empty.");
     }
   }
 }

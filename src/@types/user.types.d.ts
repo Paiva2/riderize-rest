@@ -14,6 +14,11 @@ export interface UserServiceRegisterRequest {
   email: string;
 }
 
+export interface UserServiceAuthRequest {
+  password: string;
+  email: string;
+}
+
 export interface IPedal {
   id: string;
   name: string;
