@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-import { pigPgConnection } from "./http/lib/pg";
+import { pigPgConnection } from "./utils/pingPgConnection";
 import bodyParser from "body-parser";
 import routes from "./http/routes";
 import globalExceptionHandler from "./http/middlewares/globalExceptionHandler";

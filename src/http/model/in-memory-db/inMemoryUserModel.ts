@@ -25,4 +25,8 @@ export default class InMemoryUserModel implements UserRepository {
 
     return user;
   }
+
+  async findById(id: string): Promise<IUser | null> {
+    return this.users.find((user) => user.id === id) ?? null;
+  }
 }

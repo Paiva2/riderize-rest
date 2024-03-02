@@ -13,10 +13,9 @@ export default class JwtService {
       token = jwt.sign(
         {
           data: sub,
-          issuer: this.issuer,
         },
         this.secret,
-        { expiresIn: this.expTime }
+        { expiresIn: this.expTime, issuer: this.issuer }
       );
     } catch (e) {
       console.error(e);
@@ -27,14 +26,14 @@ export default class JwtService {
   }
 
   public decode(token: string) {
-    let sub = null;
+    let sub = "";
 
     try {
       const parseToken = jwt.verify(token, this.secret, {
         issuer: this.issuer,
       }) as JwtPayload;
 
-      sub = parseToken.sub;
+      sub = parseToken.data!;
     } catch (e) {
       console.error(e);
       throw new ForbiddenException("Error while verifying the token...");

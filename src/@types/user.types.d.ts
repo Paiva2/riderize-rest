@@ -5,6 +5,7 @@ export interface IUser {
   email: string;
   createdAt: Date;
   updatedAt: Date;
+
   pedals?: IPedal[];
 }
 
@@ -17,15 +18,4 @@ export interface UserServiceRegisterRequest {
 export interface UserServiceAuthRequest {
   password: string;
   email: string;
-}
-
-export interface IPedal {
-  id: string;
-  name: string;
-  startDate: Date;
-  startDateRegistration: Date;
-  endDateRegistration: Date;
-  additionalInformation: Date;
-  startPlace: string;
-  participansLimit: number;
 }
