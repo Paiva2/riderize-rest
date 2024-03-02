@@ -40,7 +40,7 @@ describe("New pedal service", () => {
       startDateRegistration: new Date(2070, 1, 5, 0),
       endDateRegistration: new Date(2070, 1, 5, 0),
       name: "Test Pedal",
-      participansLimit: 100,
+      participantsLimit: 100,
       startPlace: "Street X;number 99;neighbourhood X;State X",
     });
 
@@ -53,7 +53,8 @@ describe("New pedal service", () => {
         endDateRegistration: new Date(2070, 1, 5, 0),
         additionalInformation: "Test info",
         startPlace: "Street X;number 99;neighbourhood X;State X",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
 
@@ -77,7 +78,8 @@ describe("New pedal service", () => {
         startDateRegistration: new Date(2070, 1, 5, 0),
         endDateRegistration: new Date(2070, 1, 5, 0),
         name: "",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }).rejects.toThrowError("name dto can't be null.");
@@ -92,7 +94,8 @@ describe("New pedal service", () => {
         startDateRegistration: new Date(2070, 1, 5, 0),
         endDateRegistration: new Date(2070, 1, 5, 0),
         name: "Test Pedal",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }).rejects.toThrowError("startDate dto can't be empty.");
@@ -107,7 +110,8 @@ describe("New pedal service", () => {
         startDateRegistration: null,
         endDateRegistration: new Date(2070, 1, 5, 0),
         name: "Test Pedal",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }).rejects.toThrowError("startDateRegistration dto can't be empty.");
@@ -122,7 +126,8 @@ describe("New pedal service", () => {
         //@ts-ignore
         endDateRegistration: null,
         name: "Test Pedal",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }).rejects.toThrowError("endDateRegistration dto can't be empty.");
@@ -136,7 +141,8 @@ describe("New pedal service", () => {
         startDateRegistration: new Date(2070, 1, 5, 0),
         endDateRegistration: new Date(2070, 1, 5, 0),
         name: "Test Pedal",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         //@ts-ignore
         startPlace: null,
       });
@@ -151,7 +157,8 @@ describe("New pedal service", () => {
         startDateRegistration: new Date(2070, 1, 5, 0),
         endDateRegistration: new Date(2070, 1, 5, 0),
         name: "Test Pedal",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }).rejects.toThrow("startDate can't be before today.");
@@ -165,7 +172,8 @@ describe("New pedal service", () => {
         startDateRegistration: new Date(2070, 1, 5, 0),
         endDateRegistration: new Date(2070, 1, 5, 0),
         name: "Test Pedal",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }).rejects.toThrow(
@@ -181,7 +189,8 @@ describe("New pedal service", () => {
         startDateRegistration: new Date(2070, 1, 6, 0),
         endDateRegistration: new Date(2070, 1, 10, 0),
         name: "Test Pedal",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }).rejects.toThrow(
@@ -197,7 +206,8 @@ describe("New pedal service", () => {
         startDateRegistration: new Date(2070, 1, 11, 0),
         endDateRegistration: new Date(2070, 1, 10, 0),
         name: "Test Pedal",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }).rejects.toThrow(
@@ -213,7 +223,8 @@ describe("New pedal service", () => {
         startDateRegistration: dayjs().add(-10, "days").toDate(),
         endDateRegistration: new Date(2070, 1, 10, 0),
         name: "Test Pedal",
-        participansLimit: 100,
+        participantsLimit: 100,
+        participantsCount: 0,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }).rejects.toThrow(

@@ -9,7 +9,7 @@ export default class PgUserModel implements UserRepository {
       [email]
     );
 
-    if (!rows[0]) return null;
+    if (!rows.length) return null;
 
     const userModel = rows[0];
 
@@ -28,7 +28,7 @@ export default class PgUserModel implements UserRepository {
       id,
     ]);
 
-    if (!rows[0]) return null;
+    if (!rows.length) return null;
 
     const userModel = rows[0];
 

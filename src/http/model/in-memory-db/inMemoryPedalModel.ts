@@ -20,7 +20,8 @@ export default class InMemoryPedalModel implements PedalRepository {
       startDate: newPedal.startDate,
       startDateRegistration: newPedal.startDateRegistration,
       endDateRegistration: newPedal.endDateRegistration,
-      participansLimit: newPedal.participansLimit,
+      participantsLimit: newPedal.participantsLimit,
+      participantsCount: 0,
       startPlace: newPedal.startPlace,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -43,5 +44,26 @@ export default class InMemoryPedalModel implements PedalRepository {
       totalItens: list.length,
       pedals: list.splice((page - 1) * perPage, page * perPage),
     };
+  }
+
+  async findById(pedalId: string): Promise<IPedal | null> {
+    return this.pedals.find((pedal) => pedal.id === pedalId) ?? null;
+  }
+
+  async insertSubscriber(pedalId: string): Promise<IPedal> {
+    let updatedPedal = {} as IPedal;
+
+    this.pedals = this.pedals.map((pedal) => {
+      if (pedal.id === pedalId) {
+        pedal.participantsCount! += 1;
+        pedal.updatedAt = new Date();
+
+        updatedPedal = pedal;
+      }
+
+      return pedal;
+    });
+
+    return updatedPedal;
   }
 }

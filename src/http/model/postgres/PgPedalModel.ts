@@ -5,7 +5,6 @@ import {
 } from "../../../@types/pedal.types";
 import pool from "../../lib/pg";
 import PedalRepository from "../../repositories/pedalRepository";
-
 export default class PgPedalModel implements PedalRepository {
   async save(
     userId: string,
@@ -16,7 +15,7 @@ export default class PgPedalModel implements PedalRepository {
       endDateRegistration,
       additionalInformation,
       startPlace,
-      participansLimit,
+      participantsLimit,
     }: IPedalCreationRequest
   ): Promise<IPedal> {
     const { rows } = await pool.query(
@@ -28,7 +27,7 @@ export default class PgPedalModel implements PedalRepository {
         end_date_registration,
         additional_information,
         start_place,
-        participans_limit,
+        participants_limit,
         pedal_owner_id
       )
       VALUES($1, $2, $3, $4, $5, $6, $7, $8)
@@ -41,12 +40,12 @@ export default class PgPedalModel implements PedalRepository {
         endDateRegistration,
         additionalInformation,
         startPlace,
-        participansLimit,
+        participantsLimit,
         userId,
       ]
     );
 
-    return rows[0] as IPedal;
+    return this.formatModelReturn(rows[0]);
   }
 
   async listAll(page: number, perPage: number): Promise<IPedalListPaginated> {
@@ -55,7 +54,7 @@ export default class PgPedalModel implements PedalRepository {
       SELECT * FROM tb_pedals 
       WHERE DATE(end_date_registration) >= CURRENT_DATE  
       ORDER BY created_at DESC
-      LIMIT $2 OFFSET ($1 - 1) * $2;
+      LIMIT $2 OFFSET ($1 - 1) * $2
    `,
       [page, perPage]
     );
@@ -73,20 +72,50 @@ export default class PgPedalModel implements PedalRepository {
       perPage,
       totalItens,
       pedals: rows.map((pedal) => {
-        return {
-          id: pedal.id,
-          name: pedal.name,
-          additionalInformation: pedal.additional_information,
-          startDate: pedal.start_date,
-          startDateRegistration: pedal.startDate_registration,
-          endDateRegistration: pedal.end_date_registration,
-          startPlace: pedal.start_place,
-          participansLimit: pedal.participans_limit,
-          createdAt: pedal.created_at,
-          updatedAt: pedal.updated_at,
-          pedalOwnerId: pedal.pedal_owner_id,
-        };
+        return this.formatModelReturn(pedal);
       }),
+    };
+  }
+
+  async findById(pedalId: string): Promise<IPedal | null> {
+    const { rows } = await pool.query(`SELECT * FROM tb_pedals WHERE id = $1`, [
+      pedalId,
+    ]);
+
+    if (!rows.length) return null;
+
+    return this.formatModelReturn(rows[0]);
+  }
+
+  async insertSubscriber(pedalId: string): Promise<IPedal> {
+    const { rows } = await pool.query(
+      `
+      WITH curr_val AS (
+        SELECT participants_count FROM tb_pedals WHERE id = $1;
+      )
+
+      UPDATE tb_pedals WHERE id = $1 SET participants_count = (SELECT * curr_val) + 1 RETURNING *
+    `,
+      [pedalId]
+    );
+
+    return this.formatModelReturn(rows[0]);
+  }
+
+  private formatModelReturn(data: any): IPedal {
+    return {
+      id: data.id,
+      name: data.name,
+      additionalInformation: data.additional_information,
+      startDate: data.start_date,
+      startDateRegistration: data.startDate_registration,
+      endDateRegistration: data.end_date_registration,
+      startPlace: data.start_place,
+      participantsLimit: data.participans_limit,
+      participantsCount: data.participants_count,
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+      pedalOwnerId: data.pedal_owner_id,
     };
   }
 }

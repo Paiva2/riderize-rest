@@ -6,7 +6,8 @@ export interface IPedal {
   endDateRegistration: Date;
   additionalInformation: string;
   startPlace: string;
-  participansLimit: number;
+  participantsLimit: number;
+  participantsCount?: number;
   createdAt: Date;
   updatedAt: Date;
 

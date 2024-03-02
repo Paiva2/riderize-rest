@@ -41,7 +41,7 @@ describe("List Pedals Service", () => {
       startDateRegistration: new Date(2070, 0, 5, 0),
       endDateRegistration: new Date(2070, 0, 15, 0),
       name: `Test Pedal Expired`,
-      participansLimit: 100,
+      participantsLimit: 100,
       startPlace: "Street X;number 99;neighbourhood X;State X",
     });
 
@@ -52,7 +52,7 @@ describe("List Pedals Service", () => {
         startDateRegistration: new Date(2070, 1, 5, 0),
         endDateRegistration: new Date(2070, 1, 15, 0),
         name: `Test Pedal ${i}`,
-        participansLimit: 100,
+        participantsLimit: 100,
         startPlace: "Street X;number 99;neighbourhood X;State X",
       });
     }
@@ -75,7 +75,8 @@ describe("List Pedals Service", () => {
           endDateRegistration: new Date(2070, 1, 15, 0),
           additionalInformation: "Test info 21",
           startPlace: "Street X;number 99;neighbourhood X;State X",
-          participansLimit: 100,
+          participantsLimit: 100,
+          participantsCount: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
 
@@ -90,7 +91,8 @@ describe("List Pedals Service", () => {
           endDateRegistration: new Date(2070, 1, 15, 0),
           additionalInformation: "Test info 22",
           startPlace: "Street X;number 99;neighbourhood X;State X",
-          participansLimit: 100,
+          participantsLimit: 100,
+          participantsCount: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
 
@@ -105,7 +107,8 @@ describe("List Pedals Service", () => {
           endDateRegistration: new Date(2070, 1, 15, 0),
           additionalInformation: "Test info 23",
           startPlace: "Street X;number 99;neighbourhood X;State X",
-          participansLimit: 100,
+          participantsLimit: 100,
+          participantsCount: 0,
           createdAt: new Date(),
           updatedAt: new Date(),
 

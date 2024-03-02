@@ -30,7 +30,7 @@ export default class PedalService {
       throw new NotFoundException("User not found.");
     }
 
-    if (dto.participansLimit < 1) {
+    if (dto.participantsLimit < 1) {
       throw new ConflictException("participantsLimit can't be less than 1.");
     }
 
