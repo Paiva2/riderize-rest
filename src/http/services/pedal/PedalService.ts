@@ -1,6 +1,7 @@
 import type {
   IPedal,
   IPedalCreationRequest,
+  IPedalListPaginated,
 } from "../../../@types/pedal.types";
 import PedalDtoService from "./pedalDtoService";
 import UserRepository from "../../repositories/userRepository";
@@ -71,5 +72,22 @@ export default class PedalService {
     const creation = await this.pedalRepository.save(userId, dto);
 
     return creation;
+  }
+
+  public async listAll(
+    page: number,
+    perPage: number
+  ): Promise<IPedalListPaginated> {
+    if (page < 1) {
+      page = 0;
+    }
+
+    if (perPage < 5) {
+      page = 5;
+    }
+
+    const pedalList = await this.pedalRepository.listAll(page, perPage);
+
+    return pedalList;
   }
 }

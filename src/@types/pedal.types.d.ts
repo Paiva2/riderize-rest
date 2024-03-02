@@ -15,3 +15,10 @@ export interface IPedal {
 
 export interface IPedalCreationRequest
   extends Omit<IPedal, "id" | "pedalOwnerId" | "updatedAt" | "createdAt"> {}
+
+export interface IPedalListPaginated {
+  pedals: IPedal[];
+  page: number;
+  perPage: number;
+  totalItens: number;
+}

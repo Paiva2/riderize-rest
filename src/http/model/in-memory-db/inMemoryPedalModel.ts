@@ -1,5 +1,9 @@
 import { randomUUID } from "crypto";
-import { IPedalCreationRequest, IPedal } from "../../../@types/pedal.types";
+import {
+  IPedalCreationRequest,
+  IPedal,
+  IPedalListPaginated,
+} from "../../../@types/pedal.types";
 import PedalRepository from "../../repositories/pedalRepository";
 
 export default class InMemoryPedalModel implements PedalRepository {
@@ -26,5 +30,18 @@ export default class InMemoryPedalModel implements PedalRepository {
     this.pedals.push(pedal);
 
     return pedal;
+  }
+
+  async listAll(page: number, perPage: number): Promise<IPedalListPaginated> {
+    const list = this.pedals.filter(
+      (pedal) => pedal.endDateRegistration >= new Date()
+    );
+
+    return {
+      page,
+      perPage,
+      totalItens: list.length,
+      pedals: list.splice((page - 1) * perPage, page * perPage),
+    };
   }
 }

@@ -6,4 +6,6 @@ export default function pedalRoutes(app: Express) {
   const pedalController = new PedalController();
 
   app.post("/pedal", [jwtHandler], pedalController.createPedal);
+
+  app.get("/pedal/list", pedalController.listAllValidPedals);
 }

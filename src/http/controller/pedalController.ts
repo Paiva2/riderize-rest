@@ -30,4 +30,17 @@ export default class PedalController {
       },
     });
   };
+
+  public listAllValidPedals = async (req: Request, res: Response) => {
+    let { page, perPage } = req.query;
+
+    if (!page) page = "1";
+    if (!perPage) perPage = "5";
+
+    const pedalService = await this.factory.exec();
+
+    const list = await pedalService.listAll(Number(page), Number(perPage));
+
+    return res.status(200).send(list);
+  };
 }
