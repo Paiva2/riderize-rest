@@ -31,4 +31,21 @@ export default class SubscriptionController {
       },
     });
   };
+
+  public listOwnSubscriptions = async (req: Request, res: Response) => {
+    const pagination = req.query;
+
+    const parseSubject = this.jwtService.decode(
+      req.headers.authorization!.replace("Bearer ", "")
+    );
+
+    const subscriptionService = await this.subscriptionFactory.exec();
+
+    const list = await subscriptionService.listOwn(parseSubject, {
+      page: Number(pagination.page),
+      perPage: Number(pagination.perPage),
+    });
+
+    return res.status(200).send(list);
+  };
 }

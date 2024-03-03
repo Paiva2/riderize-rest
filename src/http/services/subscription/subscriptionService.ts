@@ -4,6 +4,7 @@ import PedalRepository from "../../repositories/pedalRepository";
 import SusbcriptionRepository from "../../repositories/subscriptionRepository";
 import SubscriptionDtoService from "./subscriptionDtoCheck";
 import UserRepository from "../../repositories/userRepository";
+import BadRequestException from "../../exceptions/badRequestException";
 
 export default class SubscriptionService {
   private subscripeDtoService = new SubscriptionDtoService();
@@ -71,4 +72,31 @@ export default class SubscriptionService {
 
     return makeSubscription;
   }
+
+  public async listOwn(
+    userId: string,
+    pagination: { page: number; perPage: number }
+  ) {
+    if (!userId) {
+      throw new BadRequestException("Invalid user id.");
+    }
+
+    if (pagination.page < 1) pagination.page = 1;
+    if (pagination.perPage < 5) pagination.perPage = 5;
+
+    const doesUserExists = await this.userRepository.findById(userId);
+
+    if (!doesUserExists) {
+      throw new NotFoundException("User not found.");
+    }
+
+    let subscriptions = await this.subscriptionRepository.findAllByUserId(
+      userId,
+      pagination
+    );
+
+    return subscriptions;
+  }
+
+  public async delete() {}
 }

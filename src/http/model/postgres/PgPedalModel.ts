@@ -30,7 +30,7 @@ export default class PgPedalModel implements PedalRepository {
         participants_limit,
         pedal_owner_id
       )
-      VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
     `,
       [
@@ -91,10 +91,12 @@ export default class PgPedalModel implements PedalRepository {
     const { rows } = await pool.query(
       `
       WITH curr_val AS (
-        SELECT participants_count FROM tb_pedals WHERE id = $1;
+        SELECT participants_count FROM tb_pedals WHERE id = $1
+      ), perform_update AS (
+        UPDATE tb_pedals SET participants_count = (SELECT * FROM curr_val) + 1 WHERE id = $1 RETURNING *
       )
-
-      UPDATE tb_pedals WHERE id = $1 SET participants_count = (SELECT * curr_val) + 1 RETURNING *
+      
+      SELECT * FROM perform_update;      
     `,
       [pedalId]
     );

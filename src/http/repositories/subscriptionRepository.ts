@@ -1,4 +1,7 @@
-import { ISubscription } from "../../@types/subscription.types";
+import {
+  ISubscription,
+  ISubscriptionListPaginated,
+} from "../../@types/subscription.types";
 
 export default interface SusbcriptionRepository {
   save(subscription: {
@@ -10,4 +13,9 @@ export default interface SusbcriptionRepository {
     userId: string;
     rideId: string;
   }): Promise<ISubscription | null>;
+
+  findAllByUserId(
+    userId: string,
+    pagination: { page: number; perPage: number }
+  ): Promise<ISubscriptionListPaginated>;
 }
