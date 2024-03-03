@@ -104,6 +104,38 @@ export default class PgPedalModel implements PedalRepository {
     return this.formatModelReturn(rows[0]);
   }
 
+  async findAllByUserId(
+    userId: string,
+    { page, perPage }: { page: number; perPage: number }
+  ): Promise<IPedalListPaginated> {
+    const { rows } = await pool.query(
+      `
+      SELECT * FROM tb_pedals 
+      WHERE pedal_owner_id = $3
+      ORDER BY created_at DESC
+      LIMIT $2 OFFSET ($1 - 1) * $2
+   `,
+      [page, perPage, userId]
+    );
+
+    const { rows: totalCount } = await pool.query(`
+      SELECT COUNT(*)
+      FROM tb_pedals
+      WHERE DATE(end_date_registration) >= CURRENT_DATE;
+    `);
+
+    const totalItens = +totalCount[0].count;
+
+    return {
+      page,
+      perPage,
+      totalItens,
+      pedals: rows.map((pedal) => {
+        return this.formatModelReturn(pedal);
+      }),
+    };
+  }
+
   private formatModelReturn(data: any): IPedal {
     return {
       id: data.id,
@@ -113,7 +145,7 @@ export default class PgPedalModel implements PedalRepository {
       startDateRegistration: data.startDate_registration,
       endDateRegistration: data.end_date_registration,
       startPlace: data.start_place,
-      participantsLimit: data.participans_limit,
+      participantsLimit: data.participants_limit,
       participantsCount: data.participants_count,
       createdAt: data.created_at,
       updatedAt: data.updated_at,

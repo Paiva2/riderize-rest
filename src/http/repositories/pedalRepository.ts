@@ -12,4 +12,9 @@ export default interface PedalRepository {
   findById(pedalId: string): Promise<IPedal | null>;
 
   insertSubscriber(pedalId: string): Promise<IPedal>;
+
+  findAllByUserId(
+    userId: string,
+    pagination: { page: number; perPage: number }
+  ): Promise<IPedalListPaginated>;
 }

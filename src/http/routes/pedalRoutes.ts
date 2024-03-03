@@ -8,4 +8,6 @@ export default function pedalRoutes(app: Express) {
   app.post("/pedal", [jwtHandler], pedalController.createPedal);
 
   app.get("/pedal/list", pedalController.listAllValidPedals);
+
+  app.get("/pedal/list/own", pedalController.listAllOwnPedals);
 }

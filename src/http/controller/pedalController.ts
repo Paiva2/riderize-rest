@@ -43,4 +43,24 @@ export default class PedalController {
 
     return res.status(200).send(list);
   };
+
+  public listAllOwnPedals = async (req: Request, res: Response) => {
+    let pagination = req.query;
+
+    const parseSubject = this.jwtService.decode(
+      req.headers.authorization!.replace("Bearer ", "")
+    );
+
+    if (!pagination.page) pagination.page = "1";
+    if (!pagination.perPage) pagination.perPage = "5";
+
+    const pedalService = await this.factory.exec();
+
+    const list = await pedalService.listOwn(parseSubject, {
+      page: Number(pagination.page),
+      perPage: Number(pagination.perPage),
+    });
+
+    return res.status(200).send(list);
+  };
 }

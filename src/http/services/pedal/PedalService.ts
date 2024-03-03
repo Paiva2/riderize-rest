@@ -8,7 +8,9 @@ import UserRepository from "../../repositories/userRepository";
 import PedalRepository from "../../repositories/pedalRepository";
 import ConflictException from "../../exceptions/conflictException";
 import NotFoundException from "../../exceptions/notFoundException";
+import BadRequestException from "../../exceptions/badRequestException";
 import dayjs from "dayjs";
+import { faker } from "@faker-js/faker";
 
 export default class PedalService {
   private pedalDtoService = new PedalDtoService();
@@ -89,5 +91,35 @@ export default class PedalService {
     const pedalList = await this.pedalRepository.listAll(page, perPage);
 
     return pedalList;
+  }
+
+  public async listOwn(
+    userId: string,
+    pagination: { page: number; perPage: number }
+  ) {
+    if (!userId) {
+      throw new BadRequestException("Invalid user id.");
+    }
+
+    if (pagination.page < 1) {
+      pagination.page = 1;
+    }
+
+    if (pagination.perPage < 5) {
+      pagination.page = 5;
+    }
+
+    const doesUserExists = await this.userRepository.findById(userId);
+
+    if (!doesUserExists) {
+      throw new BadRequestException("User not found.");
+    }
+
+    const listPedals = await this.pedalRepository.findAllByUserId(
+      userId,
+      pagination
+    );
+
+    return listPedals;
   }
 }

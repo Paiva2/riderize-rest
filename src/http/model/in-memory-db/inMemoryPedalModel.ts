@@ -66,4 +66,20 @@ export default class InMemoryPedalModel implements PedalRepository {
 
     return updatedPedal;
   }
+
+  async findAllByUserId(
+    userId: string,
+    { page, perPage }: { page: number; perPage: number }
+  ): Promise<IPedalListPaginated> {
+    const getPedals = this.pedals.filter(
+      (pedal) => pedal.pedalOwnerId === userId
+    );
+
+    return {
+      page,
+      perPage,
+      totalItens: getPedals.length,
+      pedals: getPedals.splice((page - 1) * perPage, perPage * page),
+    };
+  }
 }
