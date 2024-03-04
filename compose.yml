@@ -3,23 +3,21 @@ version: "3"
 services:
   db:
     image: postgres
+    container_name: db
     environment:
       - POSTGRES_USER=pglocal
       - POSTGRES_PASSWORD=pg123
       - POSTGRES_DB=riderize
       - POSTGRES_HOST=db
-    networks:
-      - app-network
-
   redis:
     image: redis
     container_name: redis
-    hostname: redis
+    env_file:
+      - .env
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-    networks:
-      - app-network
-
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
   riderize-rest:
     build:
       context: .
@@ -29,9 +27,5 @@ services:
       - redis
     env_file:
       - .env
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+    environment:
+      - HOST_DOCKER_INTERNAL=http://host.docker.internal

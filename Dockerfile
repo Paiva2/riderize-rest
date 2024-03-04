@@ -14,7 +14,7 @@ WORKDIR /home/node/app/riderize-rest
 RUN touch .env
 RUN { \
   echo 'PORT=8000'; \
-  echo 'JWT_SECRET="ASIASJRFIJASF9ASF9ASF9I3W9R43QU32R8QWER@##&*¨%(*%¨&*%üjfjgfhgsf#@@#¨@#$¨)@¨@#¨@#@##¨@"'; \
+  echo 'JWT_SECRET="ASIASJRFIJASF9ASF9ASF9I3W9R43QU32R8QWER@##&*¨%(*%¨&*%üjfjgfhgsf#@@#¨@#¨)@¨@#¨@#@##¨@"'; \
   echo 'JWT_ISSUER="renderize-test"'; \
   echo 'POSTGRES_USER=pglocal'; \
   echo 'POSTGRES_PASSWORD=pg123'; \
@@ -30,7 +30,5 @@ RUN npm install
 COPY --chown=node:node . .
 
 EXPOSE 8000
-EXPOSE 6379
-EXPOSE 5432
 
 CMD ["npm", "run", "dev"]
