@@ -24,6 +24,3 @@ services:
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
-  build:
-    context: backend-test
-    dockerfile: Dockerfile

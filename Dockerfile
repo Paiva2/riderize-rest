@@ -23,7 +23,6 @@ RUN { \
   echo 'REDIS_PORT=6379'; \
 } >> .env
 RUN npm install
-RUN docker compose up
 COPY --chown=node:node . .
 EXPOSE 8080
-CMD ["./start.sh"]
+CMD ["sh", "-c", "docker-compose up -d && npm run dev"]
