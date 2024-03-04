@@ -109,10 +109,10 @@ export default class PgPedalModel implements PedalRepository {
   ): Promise<IPedalListPaginated> {
     const { rows } = await pool.query(
       `
-           SELECT * FROM tb_pedals
-           WHERE pedal_owner_id = $3
-           ORDER BY created_at DESC
-           LIMIT $2 OFFSET ($1 - 1) * $2
+        SELECT * FROM tb_pedals
+        WHERE pedal_owner_id = $3
+        ORDER BY created_at DESC
+        LIMIT $2 OFFSET ($1 - 1) * $2
         `,
       [page, perPage, userId]
     );
