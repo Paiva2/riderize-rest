@@ -11,6 +11,10 @@ const app: Express = express();
 
 app.use(bodyParser.json());
 
+app.get("/", (req, res) => {
+  return res.status(200).send({ message: "PONG" });
+});
+
 routes(app);
 
 (async () => {
