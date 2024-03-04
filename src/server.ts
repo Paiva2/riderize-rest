@@ -1,9 +1,9 @@
 import app from "./app";
 
-const port = Number(process.env.PORT);
+const port = 8081;
 
-const server = app.listen(port ?? 8000, () => {
-  console.log("Running on port: " + port ?? 8000);
+const server = app.listen(port, () => {
+  console.log("Running on port: " + port);
 });
 
 export default server;

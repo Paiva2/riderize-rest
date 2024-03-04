@@ -11,9 +11,15 @@ export default class UserController {
 
     const { userService } = await this.factory.exec();
 
-    await userService.register(newUserDto);
+    try {
+      await userService.register(newUserDto);
 
-    return res.status(200).send({ message: "Register successfull." });
+      return res.status(200).send({ message: "Register successfull." });
+    } catch (e) {
+      console.log(e);
+
+      return res.status(500).send({ message: e });
+    }
   };
 
   public authController = async (req: Request, res: Response) => {

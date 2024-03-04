@@ -13,7 +13,7 @@ RUN git clone https://github.com/Paiva2/riderize-rest.git
 WORKDIR /home/node/app/riderize-rest
 RUN touch .env
 RUN { \
-  echo 'PORT=8000'; \
+  echo 'PORT=8081'; \
   echo 'JWT_SECRET="ASIASJRFIJASF9ASF9ASF9I3W9R43QU32R8QWER@##&*¨%(*%¨&*%üjfjgfhgsf#@@#¨@#¨)@¨@#¨@#@##¨@"'; \
   echo 'JWT_ISSUER="renderize-test"'; \
   echo 'POSTGRES_USER=pglocal'; \
@@ -29,6 +29,6 @@ RUN npm install
 
 COPY --chown=node:node . .
 
-EXPOSE 8000
+EXPOSE 8081
 
 CMD ["npm", "run", "dev"]
