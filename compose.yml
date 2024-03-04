@@ -11,19 +11,13 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_HOST=5432:5432
       - TZ=Europe/London
-    network_mode: "host"
-  cache:
-    image: redis:7.2-alpine
-    restart: always
+  redis:
+    image: redis
+    container_name: redis
+    hostname: localhost
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_HOST=redis
     ports:
       - 6379:6379
-    network_mode: "host"
-    volumes:
-      - ./data/redis:/data
-    env_file:
-      - .env
-    environment:
-      - REDIS_HOST=6379:6379
-      - REDIS_PORT=${REDIS_PORT}
