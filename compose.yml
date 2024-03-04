@@ -1,23 +1,37 @@
 version: "3"
 
 services:
-  riderize-rest:
+  db:
     image: postgres
-    ports:
-      - 5432:5432
-    env_file:
-      - .env
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - TZ=Europe/London
+      - POSTGRES_USER=pglocal
+      - POSTGRES_PASSWORD=pg123
+      - POSTGRES_DB=riderize
+      - POSTGRES_HOST=db
+    networks:
+      - app-network
+
   redis:
     image: redis
     container_name: redis
-    hostname: localhost
+    hostname: redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_HOST=redis
-    ports:
-      - 6379:6379
+    networks:
+      - app-network
+
+  riderize-rest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

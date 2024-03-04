@@ -19,6 +19,7 @@ RUN { \
   echo 'POSTGRES_USER=pglocal'; \
   echo 'POSTGRES_PASSWORD=pg123'; \
   echo 'POSTGRES_DB=riderize'; \
+  echo 'POSTGRES_HOST=db'; \
   echo 'POSTGRES_PORT=5432'; \
   echo 'REDIS_HOST=redis'; \
   echo 'REDIS_PORT=6379'; \
