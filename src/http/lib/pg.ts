@@ -9,6 +9,8 @@ const config: PoolConfig = {
   max: 20,
 };
 
+console.log(config);
+
 const pool = new Pool(config);
 
 export default pool;
