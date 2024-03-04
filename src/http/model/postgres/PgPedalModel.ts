@@ -4,8 +4,12 @@ import {
   IPedalListPaginated,
 } from "../../../@types/pedal.types";
 import pool from "../../lib/pg";
+import redis from "../../lib/redis";
 import PedalRepository from "../../repositories/pedalRepository";
+import RedisCacheModel from "../redis-cache/redisCacheModel";
 export default class PgPedalModel implements PedalRepository {
+  private cache = new RedisCacheModel();
+
   async save(
     userId: string,
     {
@@ -45,35 +49,30 @@ export default class PgPedalModel implements PedalRepository {
       ]
     );
 
-    return this.formatModelReturn(rows[0]);
+    const formattedNewPedal = this.formatModelReturn(rows[0]);
+
+    await redis.zadd(
+      "pedal-all",
+      formattedNewPedal.createdAt.getTime(),
+      JSON.stringify(formattedNewPedal)
+    );
+
+    return formattedNewPedal;
   }
 
   async listAll(page: number, perPage: number): Promise<IPedalListPaginated> {
-    const { rows } = await pool.query(
-      `
-      SELECT * FROM tb_pedals 
-      WHERE DATE(end_date_registration) >= CURRENT_DATE  
-      ORDER BY created_at DESC
-      LIMIT $2 OFFSET ($1 - 1) * $2
-   `,
-      [page, perPage]
-    );
+    const totalItens = await this.cache.countSetSize("pedal-all");
 
-    const { rows: totalCount } = await pool.query(`
-      SELECT COUNT(*)
-      FROM tb_pedals
-      WHERE DATE(end_date_registration) >= CURRENT_DATE;
-    `);
-
-    const totalItens = +totalCount[0].count;
+    const cachedItems = await this.cache.fetchAllWithKey("pedal-all", {
+      page,
+      perPage,
+    });
 
     return {
       page,
       perPage,
       totalItens,
-      pedals: rows.map((pedal) => {
-        return this.formatModelReturn(pedal);
-      }),
+      pedals: cachedItems,
     };
   }
 
@@ -110,11 +109,11 @@ export default class PgPedalModel implements PedalRepository {
   ): Promise<IPedalListPaginated> {
     const { rows } = await pool.query(
       `
-      SELECT * FROM tb_pedals 
-      WHERE pedal_owner_id = $3
-      ORDER BY created_at DESC
-      LIMIT $2 OFFSET ($1 - 1) * $2
-   `,
+           SELECT * FROM tb_pedals
+           WHERE pedal_owner_id = $3
+           ORDER BY created_at DESC
+           LIMIT $2 OFFSET ($1 - 1) * $2
+        `,
       [page, perPage, userId]
     );
 
@@ -130,9 +129,7 @@ export default class PgPedalModel implements PedalRepository {
       page,
       perPage,
       totalItens,
-      pedals: rows.map((pedal) => {
-        return this.formatModelReturn(pedal);
-      }),
+      pedals: rows.map((pedal) => this.formatModelReturn(pedal)),
     };
   }
 

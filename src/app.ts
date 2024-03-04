@@ -5,6 +5,7 @@ import routes from "./http/routes";
 import globalExceptionHandler from "./http/middlewares/globalExceptionHandler";
 import "dotenv/config";
 import "express-async-errors";
+import pingRedisConnection from "./utils/pingRedisConnection";
 
 const app: Express = express();
 
@@ -14,6 +15,7 @@ routes(app);
 
 (async () => {
   await pigPgConnection();
+  await pingRedisConnection();
 })();
 
 app.use(globalExceptionHandler);
